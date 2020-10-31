@@ -11,9 +11,16 @@ const protect = async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_TOKEN);
             console.log('decoded token', decoded);
 
-            req.user = await User.findById(decoded.id).select('-password');
 
-            next();
+            User.findById(decoded.id).then((data)=> {
+                req.user = data;
+                next();
+
+            }).catch((err)=>{
+                console.log('error in decoder',err );
+                next();
+            })
+
         }catch(err){
             console.log(err.message);
             res.status(401).json({ error: err.message});

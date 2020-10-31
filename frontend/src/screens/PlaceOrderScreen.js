@@ -1,27 +1,53 @@
-import React from 'react';
+import React,{ useEffect } from 'react';
 import {   Button , Row, Col, ListGroup, Image, Card} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import CheckoutSteps from '../components/CheckoutSteps';
+import { createOrder } from '../actions/orderActions';
 
-
-const PlaceOrderScreen = () => {
+const PlaceOrderScreen = ({ history }) => {
 
 
     const floorDigit = (num) => {
         return ( Math.round(num*100) / 100 ).toFixed(2);
     }
 
+    const dispatch = useDispatch();
+
+
     //Calculate All Prices
     const cart = useSelector(state=> state.cart)
     
-    cart.itemsPrice = cart.cartItems.reduce((acc, item)=> acc + item.price* item.qty ,0);
+    cart.itemsPrice =  floorDigit( cart.cartItems.reduce((acc, item)=> acc + item.price* item.qty ,0) );
     cart.shippingPrice = floorDigit( cart.itemsPrice > 100 ? 0 : 20 );
     cart.taxPrice = floorDigit( Number((0.18 * cart.itemsPrice).toFixed(2) ) );
     cart.totalPrice= (parseFloat(cart.itemsPrice) + parseFloat(cart.shippingPrice) + parseFloat(cart.taxPrice)).toFixed(2);
+    
+
+    const orderCreate = useSelector(state=> state.orderCreate);
+    const {order, success, error} = orderCreate;
+
+    useEffect(()=>{
+        if(success){
+            console.log('this was success');
+            history.push(`/order/${order._id}`)
+        }
+        //eslint-disable-next-line
+    },[history, success]);
+    
     const placeOrderHandler = ( ) => {
-        console.log('place Order');
+        console.log('place Order Processing');
+        dispatch( createOrder({ 
+            orderItems: cart.cartItems,
+            shippingAddress: cart.shippingAddress,
+            paymentMethod: cart.paymentMethod,
+            itemsPrice: cart.itemsPrice,
+            shippingPrice: cart.shippingPrice,
+            taxPrice: cart.taxPrice,
+            totalPrice: cart.totalPrice
+
+         }) )
     }
 
     return <div>
@@ -101,7 +127,9 @@ const PlaceOrderScreen = () => {
                                 <Col>${cart.totalPrice}</Col>
                             </Row>
                         </ListGroup.Item>
-
+                        { error ? <ListGroup.Item>
+                        <Message variant="danger" >{error}</Message>
+                        </ListGroup.Item>:null }
                         <ListGroup.Item>
                             <Button type="button" 
                             className="btn-block" 
