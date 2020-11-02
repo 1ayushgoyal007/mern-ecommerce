@@ -114,6 +114,31 @@ const updateUserProfile = asyncHandler( async( req,res ) => {
 
 })
 
-export { authUser, getUserProfile, registerUser, updateUserProfile };
+//Get All Users
+const getUsers = asyncHandler(async (req,res)=> {
+
+    const users = await User.find( {} );
+    res.json(users);
+
+})
+
+//Delete User
+
+const deleteUser = asyncHandler(async (req,res)=> {
+
+    const user = await User.findById( req.params.id );
+    if(user){
+        await user.remove();
+        res.json({ message:"User Deleted" });
+    }else{
+        res.status(404).json({message:"User Not Found"});
+    }
+    res.json(users);
+
+})
+
+
+
+export { authUser, getUserProfile, registerUser, updateUserProfile , getUsers, deleteUser};
 
 
