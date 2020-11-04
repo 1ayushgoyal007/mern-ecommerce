@@ -1,11 +1,10 @@
 import React,{ useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Row, Col, Form, Button, Table  } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { updateUserProfile, getUserDetails } from '../actions/userActions';
+import { getUserDetails } from '../actions/userActions';
 import { listMyOrders } from '../actions/orderActions';
 
 
@@ -13,9 +12,6 @@ const ProfileScreen = ({ location, history }) => {
 
     const [name, setName] = useState('');
     const [email, setEmail]= useState('');
-    const [password,setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [message, setMessage] = useState(null);
 
     const dispatch = useDispatch();
 
@@ -48,20 +44,12 @@ const ProfileScreen = ({ location, history }) => {
     const submitHandler = (e) => {
         e.preventDefault();
         console.log('submit');
-
-        if(password !== confirmPassword){
-            setMessage('Password and confirm password should be same.')
-        }else{
-        setMessage(null);
-        dispatch( updateUserProfile({ id: user._id , name, email , password  }) )
-        }
     }
 
     return <Row>
         <Col md={3} >
             <h1>Profile </h1>
             { error ? <Message variant="danger" >  {error} </Message>: null }
-            { message ? <Message variant="danger" >{message} </Message>: null }
             { success ? <Message variant="success" >Profile Updated </Message>: null }
             {loading? <Loader /> : null}
             <Form onSubmit={submitHandler} >

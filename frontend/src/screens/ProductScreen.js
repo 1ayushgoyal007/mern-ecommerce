@@ -2,6 +2,7 @@ import React,{ useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
+import Meta from '../components/Meta';
 import {useDispatch, useSelector} from 'react-redux';
 import {Row, Col, Card, Button, Image, ListGroup, Form} from 'react-bootstrap';
 import Rating from '../components/Rating';
@@ -34,7 +35,10 @@ const ProductScreen = ({ history,match }) =>{
 
     return <div>
         <Link className="btn btn-light my-3" to="/" >Go back</Link>
-        { loading? <Loader /> :error ? <Message variant="danger" >{error}</Message> : <Row>
+        { loading? <Loader /> :error ? <Message variant="danger" >{error}</Message> 
+        :<>
+        <Meta title={product.name} /> 
+        <Row>
             <Col md={6} >
                 <Image fluid src={product.image} alt={product.name} />
             </Col>
@@ -106,7 +110,8 @@ const ProductScreen = ({ history,match }) =>{
                     </ListGroup>
                 </Card>
             </Col>
-        </Row>}
+        </Row>
+        </>}
     </div>
 }
 
