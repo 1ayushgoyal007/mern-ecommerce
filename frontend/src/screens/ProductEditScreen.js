@@ -77,7 +77,7 @@ const ProductEditScreen = ({ match, history }) => {
         }catch(err){
             console.log('error occured while uploading', err);
             setUploading(false);
-        }
+        } 
     }
 
     return <div>

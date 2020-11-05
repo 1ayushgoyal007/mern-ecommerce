@@ -88,8 +88,9 @@ const updateProduct = asyncHandler(async(req,res)=>{
 
 
 const getTopProducts = asyncHandler(async(req,res)=>{
+    console.log('at least here');
     const products = await Product.find({}).sort({ rating:-1 }).limit(5);
-
+    console.log('here are the products', products);
     res.json(products);
 })
 

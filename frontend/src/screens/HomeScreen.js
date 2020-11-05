@@ -5,7 +5,6 @@ import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
 import Meta from '../components/Meta';
-import ProductCarousel from '../components/ProductCarousel';
 import { useDispatch, useSelector } from 'react-redux';
 import { listProducts } from '../actions/productActions';
 
@@ -27,7 +26,6 @@ const HomeScreen =  ({ match }) =>{
 
     return <div>
         <Meta  />
-        <ProductCarousel />
         <h1>Latest Products</h1>
         { loading? <Loader />: error ? <Message>{error}</Message>
          : <>
