@@ -16,6 +16,7 @@ import UserListScreen from './screens/UserListScreen';
 import ProductListScreen from './screens/ProductListScreen';
 import ProductEditScreen from './screens/ProductEditScreen';
 import OrderListScreen from './screens/OrderListScreen';
+import VerifyScreen from './screens/VerifyScreen';
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
@@ -28,6 +29,7 @@ function App() {
     <main className="py-3" >
       <Container>
         <Route path="/order/:id" component={OrderScreen} />
+        <Route path="/verifyAccount" component={VerifyScreen} />
         <Route path="/shipping" component={ShippingScreen} />
         <Route path="/payment" component={PaymentScreen} />
         <Route path="/placeorder" component = {PlaceOrderScreen} />

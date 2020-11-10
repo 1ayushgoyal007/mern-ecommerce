@@ -86,7 +86,6 @@ const ProductEditScreen = ({ match, history }) => {
         </Link>
         <FormContainer>
             <h1>Edit Product</h1>
-            { loadingUpdate ? <Loader /> : null }
             { errorUpdate ? <Message variant="danger" >{errorUpdate}</Message> : null }
 
             { loading ? <Loader /> : error ? <Message variant="danger" >{error}</Message> 
@@ -130,6 +129,8 @@ const ProductEditScreen = ({ match, history }) => {
                 <Form.Control type='text' placeholder="Product Description" value={description} onChange={e=> setDescription( e.target.value ) } >
                 </Form.Control>
             </Form.Group>
+            { loadingUpdate ? <Loader /> : null }
+
             <Button type='submit' variant="primary" >Update</Button>
         </Form>}
         </FormContainer>

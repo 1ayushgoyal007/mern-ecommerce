@@ -56,7 +56,7 @@ const UserListScreen = ({ history }) => {
                         <td>{user.email}</td>
                         <td>{user.isAdmin ? "Admin" : "Not Admin"}</td>
                         <td>
-                            <Button variant="danger" onClick={()=> deleteHandler( user._id) }  > Delete User </Button>
+                            <Button variant="danger" className='btn-sm' onClick={()=> deleteHandler( user._id) }  > Delete User </Button>
                         </td>
                     </tr>
                 }) }

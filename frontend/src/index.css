@@ -24,3 +24,9 @@ h1{
 .rating span{
   margin:1px;
 }
+.verify-btn{
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  margin-top:4rem ;
+}

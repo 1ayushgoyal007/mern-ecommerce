@@ -7,3 +7,11 @@
 [1102/172106.887:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1102/230453.630:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
 [1103/231035.758:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1109/111246.933:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)
+[1109/162234.875:ERROR:process_info.cc(329)] VirtualQueryEx: Access is denied. (0x5)
+[1109/162234.946:ERROR:process_info.cc(556)] ReadMemoryInfo failed
+[1109/162234.812:ERROR:process_memory_win.cc(73)] ReadMemory at 0x7ff800246e00 of 12 bytes failed: Only part of a ReadProcessMemory or WriteProcessMemory request was completed. (0x12B)
+[1109/162235.028:WARNING:process_snapshot_win.cc(71)] ReadMemory ExceptionInformation failed
+[1109/162234.812:ERROR:process_memory_win.cc(73)] ReadMemory at 0x7ff800246e00 of 12 bytes failed: Only part of a ReadProcessMemory or WriteProcessMemory request was completed. (0x12B)
+[1109/162235.028:WARNING:process_snapshot_win.cc(71)] ReadMemory ExceptionInformation failed
+[1109/164559.464:ERROR:directory_reader_win.cc(43)] FindFirstFile: The system cannot find the path specified. (0x3)

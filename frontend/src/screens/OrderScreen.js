@@ -1,5 +1,5 @@
 import React,{ useEffect , useState} from 'react';
-import {    Row, Col, ListGroup, Image, Card, Button} from 'react-bootstrap';
+import {Row, Col, ListGroup, Image, Card, Button} from 'react-bootstrap';
 import { PayPalButton } from 'react-paypal-button-v2';
 import {Link} from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,6 +36,9 @@ const OrderScreen = ({ match, history }) => {
 
 
     const [sdkReady, setSdkReady] = useState(false);
+    const [emailVerify, setEmailVerify] = useState(null);
+    const [verifyLoader, setVerifyLoader] = useState(true);
+
 
     useEffect(()=>{
         if(!userInfo){
@@ -54,6 +57,32 @@ const OrderScreen = ({ match, history }) => {
 
             document.body.appendChild(script);
 
+        }
+
+        const verifyHandler =  async () => {
+            const { data } = await axios.get(`/api/users/${userInfo._id}`);
+            setEmailVerify(data.emailVerified);
+            setVerifyLoader(false);
+        }
+
+        verifyHandler();
+
+        const checkPayment =  () =>{
+            axios.get(`/api/payment/paytm/${orderId}`).then((resp)=>{
+                console.log('response',resp.data);
+                console.log('response',resp.data.length);
+                if(resp.data.length){
+                    if(!order.isPaid){
+                        dispatch( payOrder(orderId) )
+                    }
+                }
+            }).catch((err)=>{
+                console.log('error in fetch',err.message);
+            })
+
+        }
+        if(!order.isPaid){
+            checkPayment();
         }
 
         if(!order || successPay || successDeliver ){
@@ -79,13 +108,26 @@ const OrderScreen = ({ match, history }) => {
     }
 
     const successPaymentHandler = ( paymentResult ) => {
-        console.log('payment result is', paymentResult);
         dispatch( payOrder(orderId, paymentResult) )
+    }
+
+    const PaytmHandler =  (e) => {
+        e.preventDefault();
+        const data = {
+            amount:parseInt(order.totalPrice),
+            orderId: orderId,
+            userId: userInfo._id
+        }
+        axios.post('http://localhost:5050/payment',data).then((res)=>{
+            console.log('post done', res);
+        }).catch((err)=>{
+            console.log('post not done', err.message);
+        })
     }
 
     return loading ? <Loader /> : error ? <Message variant="danger" >{error}</Message> : <>
     <h1>Order {order._id}</h1>
-    <Row>
+    <Row> 
             <Col md={8} >
                 <ListGroup variant="flush" >
                     <ListGroup.Item>
@@ -173,7 +215,20 @@ s
                         </ListGroup.Item>
                         { !order.isPaid ? <ListGroup.Item>
                             { loadingPay ? <Loader /> : null}
-                            { !sdkReady ? <Loader /> : <PayPalButton currency="INR" amount={ parseInt( order.totalPrice )} onSuccess={successPaymentHandler} /> } 
+                            { verifyLoader ? <Loader /> : !emailVerify ?
+                             <Link to="/verifyAccount" ><Button variant="dark" >Let's Verify Email First</Button></Link>
+                              :  !sdkReady ? <Loader /> 
+                              : <div>
+                                  <PayPalButton currency="INR" amount={ parseInt( order.totalPrice )} onSuccess={successPaymentHandler} />
+                                  <div>
+                                      <form action="http://localhost:5050/payment" method="POST" >
+                                          <input type="hidden" name="amount" value={ parseInt( order.totalPrice )} />
+                                          <input type="hidden" name="orderId" value={orderId} />
+                                          <input type="hidden" name="userId" value={userInfo._id} />
+                                          <Button variant="info" type="submit" >Pay with Paytm</Button>
+                                      </form>
+                                  </div>
+                                </div> } 
                         </ListGroup.Item> : null }
                         { loadingDeliver ? <Loader /> : null }
                         { ( userInfo && userInfo.isAdmin && order.isPaid && !order.isDelivered) ? <ListGroup.Item>
